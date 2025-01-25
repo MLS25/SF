@@ -286,7 +286,7 @@
                 <input type="text" name="description" id="desc" placeholder="Project description" class="forminputs" required>
                 <label for="image">Upload Project Image (optional)</label>
                 <input type="file" id="image" name="image" class="forminputs" accept="image/*">
-                <button type="submit" id="button">Submit</button>
+                <button type="submit" id="button" onclick="show()">Submit</button>
             </form>
         </div>
     </section>
@@ -357,13 +357,9 @@
         function closeModal() {
             document.getElementById("modal").style.display = "none";
         }
-        function showConfirmationModal() {
+        function show() {
     const modal = document.getElementById("confirmation-modal");
     modal.style.display = "flex"; // Show the modal
-
-    setTimeout(() => {
-        modal.style.display = "none"; // Hide the modal after 3 seconds
-    }, 10000);
 }
     </script>
 </body>

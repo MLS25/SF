@@ -282,6 +282,8 @@
                 <input type="text" name="age" placeholder="Age goes here" id="age" class="forminputs" required>
                 <label for="class">Student's Class</label>
                 <input type="text" name="class" placeholder="Class goes here" id="class" class="forminputs" required>
+                                <label for="class">Email</label>
+                <input type="text" name="class" placeholder="Email goes here" id="mail" class="forminputs" required>
                 <label for="description">Description</label>
                 <input type="text" name="description" id="desc" placeholder="Project description" class="forminputs" required>
                 <label for="image">Upload Project Image (optional)</label>
@@ -335,7 +337,7 @@
             fetch(imgurUrl, {
                 method: "POST",
                 headers: {
-                    Authorization: `Client-ID ${imgurClientId}`,
+                    Authorization: Client-ID ${imgurClientId},
                 },
                 body: formDataImgur,
             })

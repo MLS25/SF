@@ -295,73 +295,95 @@
             <button class="modal-close" onclick="closeModal()">Close</button>
         </div>
     </div>
+        <div class="modal" id="modal2">
+        <div class="modal-content">
+            <div class="modal-header">Failed to upload project (please fill all fields)</div>
+            <button class="modal-close" onclick="closeModal()">Close</button>
+        </div>
+    </div>
 
-    <script>
-        document.getElementById("submitio").addEventListener("submit", function (event) {
-            event.preventDefault();
+<script>
+    document.getElementById("submitio").addEventListener("submit", function (event) {
+        event.preventDefault();
 
-            const name = document.getElementById("name").value;
-            const age = document.getElementById("age").value;
-            const classs = document.getElementById("class").value;
-            const description = document.getElementById("desc").value;
-            const imageFile = document.getElementById("image").files[0];
+        const name = document.getElementById("name").value;
+        const age = document.getElementById("age").value;
+        const classs = document.getElementById("class").value;
+        const description = document.getElementById("desc").value;
+        const imageFile = document.getElementById("image").files[0];
 
-            const imgurClientId = "acf54432c991faf";
-            const imgurUrl = "https://api.imgur.com/3/image";
-            const formDataImgur = new FormData();
-            if (imageFile) {
-                formDataImgur.append("image", imageFile);
-            }
+        const imgurClientId = "acf54432c991faf";
+        const imgurUrl = "https://api.imgur.com/3/image";
+        const formDataImgur = new FormData();
+        if (imageFile) {
+            formDataImgur.append("image", imageFile);
+        }
 
-            fetch(imgurUrl, {
-                method: "POST",
-                headers: {
-                    Authorization: `Client-ID ${imgurClientId}`,
-                },
-                body: formDataImgur,
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const imgurLink = data.success ? data.data.link : "";
+        fetch(imgurUrl, {
+            method: "POST",
+            headers: {
+                Authorization: `Client-ID ${imgurClientId}`,
+            },
+            body: formDataImgur,
+        })
+            .then(response => response.json())
+            .then(data => {
+                const imgurLink = data.success ? data.data.link : "";
 
-                    const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSee7JNsnGxrgZ1N6oR-YxuYsnSLMnIOQRT1C3xuVnwE9Rh-3g/formResponse";
-                    const formDataGoogle = new URLSearchParams();
-                    formDataGoogle.append("entry.1444177535", name);
-                    formDataGoogle.append("entry.1238907363", age);
-                    formDataGoogle.append("entry.1947938908", classs);
-                    formDataGoogle.append("entry.1431629261", description);
-                    formDataGoogle.append("entry.1522905380", imgurLink);
+                const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSee7JNsnGxrgZ1N6oR-YxuYsnSLMnIOQRT1C3xuVnwE9Rh-3g/formResponse";
+                const formDataGoogle = new URLSearchParams();
 
-                    fetch(googleFormUrl, {
-                        method: "POST",
-                        body: formDataGoogle,
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded",
-                        },
-                    })
-                        .then(() => alert("Submission successful!"))
-                        .catch(err => console.error("Error submitting form:", err));
+                formDataGoogle.append("entry.1444177535", name);
+                formDataGoogle.append("entry.1238907363", age);
+                formDataGoogle.append("entry.1947938908", classs);
+                formDataGoogle.append("entry.1431629261", description);
+                formDataGoogle.append("entry.1522905380", imgurLink);
+
+                fetch(googleFormUrl, {
+                    method: "POST",
+                    body: formDataGoogle,
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
                 })
-                .catch(err => console.error("Error uploading image:", err));
-        });
+                    .then(() => alert("Submission successful!"))
+                    .catch(err => console.error("Error submitting form:", err));
+            })
+            .catch(err => console.error("Error uploading image:", err));
+    });
 
-function confirm() {
-    let modal = document.getElementById("modal");
-    modal.style.display = "flex";
-    setTimeout(() => {
-        modal.classList.add("show");
-    }, 10); // Small delay to allow the transition
-}
+    function confirm() {
+        let modal = document.getElementById("modal");
+        if (document.getElementById("name").value != "" && 
+            document.getElementById("age").value != "" && 
+            document.getElementById("class").value != "" && 
+            document.getElementById("desc").value != "") {
+            modal.style.display = "flex";
+        } else {
+            let modal2 = document.getElementById("modal2");
+            modal2.style.display = "flex"; // Show the modal if required fields are not filled
+            return; // Exit the function
+        }
+        setTimeout(() => {
+            modal.classList.add("show");
+        }, 10); // Small delay to allow the transition
+    }
 
-function closeModal() {
-    let modal = document.getElementById("modal");
-    modal.classList.remove("show");
-    setTimeout(() => {
-        modal.style.display = "none";
-    }, 300); // Match the transition duration
-}
+    function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.classList.remove("show");
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300); // Match the transition duration
+    }
 
-        
-    </script>
+    function closeModal2() {
+        let modal = document.getElementById("modal2");
+        modal.classList.remove("show");
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300); // Match the transition duration
+    }
+</script>
 </body>
 </html>

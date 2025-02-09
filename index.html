@@ -295,12 +295,6 @@
             <button class="modal-close" onclick="closeModal()">Close</button>
         </div>
     </div>
-        <div class="modal" id="modal2">
-        <div class="modal-content">
-            <div class="modal-header">Failed to upload project (please fill all fields)</div>
-            <button class="modal-close" onclick="closeModal()">Close</button>
-        </div>
-    </div>
 
 <script>
     document.getElementById("submitio").addEventListener("submit", function (event) {
@@ -359,10 +353,7 @@
             document.getElementById("class").value != "" && 
             document.getElementById("desc").value != "") {
             modal.style.display = "flex";
-        } else {
-            let modal2 = document.getElementById("modal2");
-            modal2.style.display = "flex"; // Show the modal if required fields are not filled
-            return; // Exit the function
+        } 
         }
         setTimeout(() => {
             modal.classList.add("show");
@@ -371,14 +362,6 @@
 
     function closeModal() {
         let modal = document.getElementById("modal");
-        modal.classList.remove("show");
-        setTimeout(() => {
-            modal.style.display = "none";
-        }, 300); // Match the transition duration
-    }
-
-    function closeModal2() {
-        let modal = document.getElementById("modal2");
         modal.classList.remove("show");
         setTimeout(() => {
             modal.style.display = "none";

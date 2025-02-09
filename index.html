@@ -296,75 +296,87 @@
         </div>
     </div>
 
-<script>
-    document.getElementById("submitio").addEventListener("submit", function (event) {
-        event.preventDefault();
 
-        const name = document.getElementById("name").value;
-        const age = document.getElementById("age").value;
-        const classs = document.getElementById("class").value;
-        const description = document.getElementById("desc").value;
-        const imageFile = document.getElementById("image").files[0];
+    <script>
+        document.getElementById("submitio").addEventListener("submit", function (event) {
+            event.preventDefault();
 
-        const imgurClientId = "acf54432c991faf";
-        const imgurUrl = "https://api.imgur.com/3/image";
-        const formDataImgur = new FormData();
-        if (imageFile) {
-            formDataImgur.append("image", imageFile);
-        }
+            // Validate required fields first
+            const name = document.getElementById("name").value;
+            const age = document.getElementById("age").value;
+            const classs = document.getElementById("class").value;
+            const description = document.getElementById("desc").value;
+            const imageFile = document.getElementById("image").files[0];
 
-        fetch(imgurUrl, {
-            method: "POST",
-            headers: {
-                Authorization: `Client-ID ${imgurClientId}`,
-            },
-            body: formDataImgur,
-        })
-            .then(response => response.json())
-            .then(data => {
-                const imgurLink = data.success ? data.data.link : "";
+            if (!name || !age || !classs || !description) {
+                alert("Please fill in all required fields!");
+                return;
+            }
 
-                const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSee7JNsnGxrgZ1N6oR-YxuYsnSLMnIOQRT1C3xuVnwE9Rh-3g/formResponse";
-                const formDataGoogle = new URLSearchParams();
+            const imgurClientId = "acf54432c991faf";
+            const imgurUrl = "https://api.imgur.com/3/image";
+            const formDataImgur = new FormData();
+            
+            if (imageFile) {
+                formDataImgur.append("image", imageFile);
+            }
 
-                formDataGoogle.append("entry.1444177535", name);
-                formDataGoogle.append("entry.1238907363", age);
-                formDataGoogle.append("entry.1947938908", classs);
-                formDataGoogle.append("entry.1431629261", description);
-                formDataGoogle.append("entry.1522905380", imgurLink);
-
-                fetch(googleFormUrl, {
+            // Upload image first if exists
+            const imgurPromise = imageFile 
+                ? fetch(imgurUrl, {
                     method: "POST",
-                    body: formDataGoogle,
                     headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
+                        Authorization: `Client-ID ${imgurClientId}`,
                     },
+                    body: formDataImgur,
+                  })
+                : Promise.resolve({ success: false, data: { link: "" } });
+
+            imgurPromise
+                .then(response => response.json())
+                .then(data => {
+                    const imgurLink = data.success ? data.data.link : "";
+
+                    // Submit to Google Form
+                    const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSee7JNsnGxrgZ1N6oR-YxuYsnSLMnIOQRT1C3xuVnwE9Rh-3g/formResponse";
+                    const formDataGoogle = new URLSearchParams();
+
+                    formDataGoogle.append("entry.1444177535", name);
+                    formDataGoogle.append("entry.1238907363", age);
+                    formDataGoogle.append("entry.1947938908", classs);
+                    formDataGoogle.append("entry.1431629261", description);
+                    formDataGoogle.append("entry.1522905380", imgurLink);
+
+                    return fetch(googleFormUrl, {
+                        method: "POST",
+                        body: formDataGoogle,
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                    });
                 })
-            })
-            .catch(err => console.error("Error uploading image:", err));
-    });
+                .then(() => {
+                    // Show success modal
+                    const modal = document.getElementById("modal");
+                    modal.style.display = "flex";
+                    setTimeout(() => modal.classList.add("show"), 10);
+                    
+                    // Reset form
+                    document.getElementById("submitio").reset();
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert("An error occurred during submission. Please try again.");
+                });
+        });
 
-    function confirm() {
-        let modal = document.getElementById("modal");
-        if (document.getElementById("name").value != "" && 
-            document.getElementById("age").value != "" && 
-            document.getElementById("class").value != "" && 
-            document.getElementById("desc").value != "") {
-            modal.style.display = "flex";
-        } 
+        function closeModal() {
+            const modal = document.getElementById("modal");
+            modal.classList.remove("show");
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 300);
         }
-        setTimeout(() => {
-            modal.classList.add("show");
-        }, 10); // Small delay to allow the transition
-    }
-
-    function closeModal() {
-        let modal = document.getElementById("modal");
-        modal.classList.remove("show");
-        setTimeout(() => {
-            modal.style.display = "none";
-        }, 300); // Match the transition duration
-    }
-</script>
+    </script>
 </body>
 </html>

@@ -15,8 +15,98 @@
     <!-- Style -->
     <link rel="stylesheet" href="css/style.css">
         <link rel="icon" type="image/png" sizes="any" href="logoimg.png">
+    
     <title>SF25</title>
   <style>
+      /* Gallery Section */
+.gallery-section {
+  background-color: #f9f9f9; /* Light background for the gallery section */
+  padding: 5rem 0; /* Spacing around the gallery */
+}
+
+/* Title */
+.gallery-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 3rem;
+}
+
+/* Gallery Item Styling */
+.gallery-item {
+  position: relative;
+  overflow: hidden; /* Prevents images from overflowing */
+  border-radius: 8px; /* Rounded corners for gallery items */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Image styling */
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the area proportionally */
+  transition: transform 0.3s ease;
+}
+
+/* Hover Effect for Images */
+.gallery-item:hover img {
+  transform: scale(1.1); /* Slight zoom on hover */
+}
+
+/* Caption styling */
+.gallery-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.6); /* Dark semi-transparent background */
+  padding: 10px 15px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Caption text styling */
+.caption-text {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* Show caption on hover */
+.gallery-item:hover .gallery-caption {
+  opacity: 1;
+}
+
+/* Grid Layout for the Gallery */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.col-md-4 {
+  flex: 1 1 calc(33.333% - 1rem); /* Three columns layout */
+  max-width: calc(33.333% - 1rem); /* Makes sure columns are equal */
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .col-md-4 {
+    flex: 1 1 100%; /* Stacks the items on smaller screens */
+    max-width: 100%;
+  }
+
+  .gallery-section h2 {
+    font-size: 2rem; /* Slightly smaller title on mobile */
+  }
+}
+
 .--brisk-axd {
   filter: blur(4px);
   user-select: none;
